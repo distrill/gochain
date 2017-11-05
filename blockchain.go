@@ -12,12 +12,6 @@ func (bc *Blockchain) AddBlock(data string) {
 	bc.blocks = append(bc.blocks, newBlock)
 }
 
-// NewGenesisBlock - shut up golinter
-// should be in block.go?
-func NewGenesisBlock() *Block {
-	return NewBlock("Genesis Block", []byte{})
-}
-
 // NewBlockChain - shut up golinter
 func NewBlockChain() *Blockchain {
 	return &Blockchain{[]*Block{NewGenesisBlock()}}

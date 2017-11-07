@@ -3,6 +3,8 @@ package main
 import (
 	"bytes"
 	"crypto/sha256"
+	"encoding/gob"
+	"log"
 	"strconv"
 	"time"
 )
@@ -40,4 +42,30 @@ func NewBlock(data string, prevBlockHash []byte) *Block {
 // NewGenesisBlock - shut up golinter
 func NewGenesisBlock() *Block {
 	return NewBlock("Genesis Block", []byte{})
+}
+
+// Serialize - turn Block instance into byte array
+func (b *Block) Serialize() []byte {
+	var result bytes.Buffer
+	encoder := gob.NewEncoder(&result)
+
+	err := encoder.Encode(b)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return result.Bytes()
+}
+
+// DeserializeBlock - turn byte array into Block instance
+func DeserializeBlock(d []byte) *Block {
+	var block Block
+
+	decoder := gob.NewDecoder(bytes.NewReader(d))
+	err := decoder.Decode(&block)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return &block
 }
